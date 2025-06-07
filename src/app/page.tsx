@@ -1,0 +1,21 @@
+'use client';
+
+import { Box, Container, Typography } from '@mui/material';
+import { AppLayout } from '@/components/layout/AppLayout';
+
+export default function Home() {
+    return (
+        <AppLayout>
+            <Container maxWidth="lg">
+                <Box sx={{ my: 4 }}>
+                    <Typography variant="h4" component="h1" gutterBottom>
+                        SCM 시스템
+                    </Typography>
+                    <Typography variant="body1">
+                        공급망 관리 시스템에 오신 것을 환영합니다.
+                    </Typography>
+                </Box>
+            </Container>
+        </AppLayout>
+    );
+}
