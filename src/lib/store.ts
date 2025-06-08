@@ -1,10 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
+// 기본 reducer
+const initialState = {};
+
+const rootReducer = (state = initialState) => state;
+
 export const store = configureStore({
-    reducer: {
-        // 여기에 리듀서들을 추가할 예정입니다
-    },
+    reducer: rootReducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

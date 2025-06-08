@@ -9,6 +9,7 @@ import {
     IconButton,
     List,
     ListItem,
+    ListItemButton,
     ListItemIcon,
     ListItemText,
     Toolbar,
@@ -20,6 +21,10 @@ import {
     Inventory as InventoryIcon,
     Factory as FactoryIcon,
     LocalShipping as ShippingIcon,
+    Warehouse as WarehouseIcon,
+    LocationOn as LocationOnIcon,
+    Build as BuildIcon,
+    History as HistoryIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 
@@ -39,9 +44,13 @@ export function AppLayout({ children }: AppLayoutProps) {
 
     const menuItems = [
         { text: '대시보드', icon: <DashboardIcon />, path: '/' },
+        { text: '제품 관리', icon: <InventoryIcon />, path: '/products' },
+        { text: '창고 관리', icon: <WarehouseIcon />, path: '/warehouses' },
+        { text: '위치 관리', icon: <LocationOnIcon />, path: '/locations' },
         { text: '재고 관리', icon: <InventoryIcon />, path: '/inventory' },
+        { text: 'BOM 관리', icon: <BuildIcon />, path: '/boms' },
         { text: '생산 관리', icon: <FactoryIcon />, path: '/production' },
-        { text: '배송 관리', icon: <ShippingIcon />, path: '/shipping' },
+        { text: '거래 이력', icon: <HistoryIcon />, path: '/transactions' },
     ];
 
     const drawer = (
@@ -49,9 +58,11 @@ export function AppLayout({ children }: AppLayoutProps) {
             <Toolbar />
             <List>
                 {menuItems.map(item => (
-                    <ListItem button key={item.text} onClick={() => router.push(item.path)}>
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <ListItemText primary={item.text} />
+                    <ListItem key={item.text} disablePadding>
+                        <ListItemButton onClick={() => router.push(item.path)}>
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <ListItemText primary={item.text} />
+                        </ListItemButton>
                     </ListItem>
                 ))}
             </List>
