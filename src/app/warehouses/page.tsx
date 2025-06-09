@@ -20,6 +20,9 @@ import {
     TableRow,
     TextField,
     Typography,
+    Switch,
+    FormControlLabel,
+    Chip,
 } from '@mui/material';
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { Warehouse, CreateWarehouseRequest, UpdateWarehouseRequest } from '@/lib/types/warehouse';
@@ -32,7 +35,7 @@ export default function WarehousesPage() {
     const [formData, setFormData] = useState<CreateWarehouseRequest>({
         code: '',
         name: '',
-        isActive: true,
+        active: true,
     });
 
     useEffect(() => {
@@ -55,14 +58,14 @@ export default function WarehousesPage() {
             setFormData({
                 code: warehouse.code,
                 name: warehouse.name,
-                isActive: warehouse.isActive,
+                active: warehouse.active,
             });
         } else {
             setEditingWarehouse(null);
             setFormData({
                 code: '',
                 name: '',
-                isActive: true,
+                active: true,
             });
         }
         setOpen(true);
@@ -74,7 +77,7 @@ export default function WarehousesPage() {
         setFormData({
             code: '',
             name: '',
-            isActive: true,
+            active: true,
         });
     };
 
@@ -106,7 +109,7 @@ export default function WarehousesPage() {
     };
 
     return (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ width: '100%', height: '100%' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
                 <Typography variant="h4">창고 관리</Typography>
                 <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()}>
@@ -131,7 +134,13 @@ export default function WarehousesPage() {
                             <TableRow key={warehouse.id}>
                                 <TableCell>{warehouse.code}</TableCell>
                                 <TableCell>{warehouse.name}</TableCell>
-                                <TableCell>{warehouse.isActive ? '활성' : '비활성'}</TableCell>
+                                <TableCell>
+                                    <Chip
+                                        label={warehouse.active ? '활성' : '비활성'}
+                                        color={warehouse.active ? 'success' : 'error'}
+                                        size="small"
+                                    />
+                                </TableCell>
                                 <TableCell>
                                     {new Date(warehouse.createdDateTime).toLocaleString()}
                                 </TableCell>
@@ -172,6 +181,17 @@ export default function WarehousesPage() {
                             value={formData.name}
                             onChange={e => setFormData({ ...formData, name: e.target.value })}
                             fullWidth
+                        />
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={formData.active}
+                                    onChange={e =>
+                                        setFormData({ ...formData, active: e.target.checked })
+                                    }
+                                />
+                            }
+                            label="활성 상태"
                         />
                     </Box>
                 </DialogContent>

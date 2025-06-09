@@ -117,7 +117,7 @@ backend.md 파일은 다른 AI가보고 판단해서 백엔드개발을 진행�
     - minimumQuantity: Long? (최소 재고량)
     - sellingPrice: Double? (판매가)
     - purchasePrice: Double? (구매가)
-    - isActive: Boolean (활성화 여부)
+    - active: Boolean (활성화 여부)
     - createdDateTime: ZonedDateTime
     - updatedDateTime: ZonedDateTime?
 
@@ -130,7 +130,7 @@ backend.md 파일은 다른 AI가보고 판단해서 백엔드개발을 진행�
     - version: String (BOM 버전)
     - description: String? (설명)
     - materials: List<BomMaterial> (구성 자재 목록)
-    - isActive: Boolean
+    - active: Boolean
     - createdDateTime: ZonedDateTime
     - updatedDateTime: ZonedDateTime?
 
@@ -141,7 +141,7 @@ backend.md 파일은 다른 AI가보고 판단해서 백엔드개발을 진행�
     - id: String
     - code: String (창고 코드, unique)
     - name: String (창고명)
-    - isActive: Boolean
+    - active: Boolean
     - createdDateTime: ZonedDateTime
     - updatedDateTime: ZonedDateTime?
 
@@ -154,7 +154,7 @@ backend.md 파일은 다른 AI가보고 판단해서 백엔드개발을 진행�
     - code: String (위치 코드)
     - name: String (위치명)
     - type: String (위치 유형)
-    - isActive: Boolean
+    - active: Boolean
     - createdDateTime: ZonedDateTime
     - updatedDateTime: ZonedDateTime?
 
@@ -240,7 +240,7 @@ Content-Type: application/json
   "minimumQuantity": 0,      // 선택, 최소 0
   "sellingPrice": 0.0,       // 선택, 최소 0
   "purchasePrice": 0.0,      // 선택, 최소 0
-  "isActive": true          // 선택, 기본값 true
+  "active": true          // 선택, 기본값 true
 }
 ```
 
@@ -272,7 +272,7 @@ Content-Type: application/json
   "minimumQuantity": 0,      // 선택, 최소 0
   "sellingPrice": 0.0,       // 선택, 최소 0
   "purchasePrice": 0.0,      // 선택, 최소 0
-  "isActive": true          // 선택
+  "active": true          // 선택
 }
 ```
 
@@ -293,7 +293,7 @@ Content-Type: application/json
 {
   "code": "string",    // 필수
   "name": "string",    // 필수
-  "isActive": true    // 선택, 기본값 true
+  "active": true    // 선택, 기본값 true
 }
 ```
 
@@ -319,7 +319,7 @@ Content-Type: application/json
 {
   "code": "string?",   // 선택
   "name": "string?",   // 선택
-  "isActive": true    // 선택
+  "active": true    // 선택
 }
 ```
 
@@ -342,7 +342,7 @@ Content-Type: application/json
   "name": "string",         // 필수
   "code": "string",         // 필수
   "type": "string",         // 필수
-  "isActive": true         // 선택, 기본값 true
+  "active": true         // 선택, 기본값 true
 }
 ```
 
@@ -373,7 +373,7 @@ Content-Type: application/json
 {
   "name": "string?",   // 선택
   "type": "string?",   // 선택
-  "isActive": true    // 선택
+  "active": true    // 선택
 }
 ```
 

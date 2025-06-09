@@ -2,7 +2,7 @@ export interface Warehouse {
     id: string;
     code: string;
     name: string;
-    isActive: boolean;
+    active: boolean;
     createdDateTime: string;
     updatedDateTime?: string;
 }
@@ -18,11 +18,11 @@ export interface ApiResponse<T> {
 export interface CreateWarehouseRequest {
     code: string;
     name: string;
-    isActive?: boolean;
+    active?: boolean;
 }
 
 export interface UpdateWarehouseRequest {
     code?: string;
     name?: string;
-    isActive?: boolean;
+    active?: boolean;
 }

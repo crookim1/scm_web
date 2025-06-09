@@ -4,7 +4,7 @@ export interface Location {
     code: string;
     name: string;
     type: string;
-    isActive: boolean;
+    active: boolean;
     createdDateTime: string;
     updatedDateTime?: string;
 }
@@ -22,11 +22,11 @@ export interface CreateLocationRequest {
     code: string;
     name: string;
     type: string;
-    isActive?: boolean;
+    active?: boolean;
 }
 
 export interface UpdateLocationRequest {
     name?: string;
     type?: string;
-    isActive?: boolean;
+    active?: boolean;
 }

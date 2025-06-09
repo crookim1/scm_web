@@ -1,11 +1,10 @@
 'use client';
 
 import { Box, Container, Typography } from '@mui/material';
-import { AppLayout } from '@/components/layout/AppLayout';
 
 export default function Home() {
     return (
-        <AppLayout>
+        <Box sx={{ width: '100%', height: '100%' }}>
             <Container maxWidth="lg">
                 <Box sx={{ my: 4 }}>
                     <Typography variant="h4" component="h1" gutterBottom>
@@ -16,6 +15,6 @@ export default function Home() {
                     </Typography>
                 </Box>
             </Container>
-        </AppLayout>
+        </Box>
     );
 }

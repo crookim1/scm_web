@@ -22,6 +22,7 @@ import {
     TableRow,
     TextField,
     Typography,
+    Chip,
 } from '@mui/material';
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { Location, CreateLocationRequest, UpdateLocationRequest } from '@/lib/types/location';
@@ -39,7 +40,7 @@ export default function LocationsPage() {
         code: '',
         name: '',
         type: '',
-        isActive: true,
+        active: true,
     });
 
     useEffect(() => {
@@ -68,7 +69,7 @@ export default function LocationsPage() {
                 code: location.code,
                 name: location.name,
                 type: location.type,
-                isActive: location.isActive,
+                active: location.active,
             });
         } else {
             setEditingLocation(null);
@@ -77,7 +78,7 @@ export default function LocationsPage() {
                 code: '',
                 name: '',
                 type: '',
-                isActive: true,
+                active: true,
             });
         }
         setOpen(true);
@@ -91,7 +92,7 @@ export default function LocationsPage() {
             code: '',
             name: '',
             type: '',
-            isActive: true,
+            active: true,
         });
     };
 
@@ -127,6 +128,11 @@ export default function LocationsPage() {
         return warehouse ? warehouse.name : '-';
     };
 
+    const getWarehouseStatus = (warehouseId: string) => {
+        const warehouse = warehouses.find(w => w.id === warehouseId);
+        return warehouse ? warehouse.active : false;
+    };
+
     return (
         <Box sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
@@ -144,7 +150,8 @@ export default function LocationsPage() {
                             <TableCell>코드</TableCell>
                             <TableCell>이름</TableCell>
                             <TableCell>유형</TableCell>
-                            <TableCell>상태</TableCell>
+                            <TableCell>위치 상태</TableCell>
+                            <TableCell>창고 상태</TableCell>
                             <TableCell>생성일</TableCell>
                             <TableCell>수정일</TableCell>
                             <TableCell>작업</TableCell>
@@ -157,7 +164,28 @@ export default function LocationsPage() {
                                 <TableCell>{location.code}</TableCell>
                                 <TableCell>{location.name}</TableCell>
                                 <TableCell>{location.type}</TableCell>
-                                <TableCell>{location.isActive ? '활성' : '비활성'}</TableCell>
+                                <TableCell>
+                                    <Chip
+                                        label={location.active ? '활성' : '비활성'}
+                                        color={location.active ? 'success' : 'error'}
+                                        size="small"
+                                    />
+                                </TableCell>
+                                <TableCell>
+                                    <Chip
+                                        label={
+                                            getWarehouseStatus(location.warehouseId)
+                                                ? '활성'
+                                                : '비활성'
+                                        }
+                                        color={
+                                            getWarehouseStatus(location.warehouseId)
+                                                ? 'success'
+                                                : 'error'
+                                        }
+                                        size="small"
+                                    />
+                                </TableCell>
                                 <TableCell>
                                     {new Date(location.createdDateTime).toLocaleString()}
                                 </TableCell>
