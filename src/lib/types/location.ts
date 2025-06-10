@@ -26,7 +26,8 @@ export interface CreateLocationRequest {
 }
 
 export interface UpdateLocationRequest {
+    warehouseId: string;
+    code: string;
     name?: string;
-    type?: string;
     active?: boolean;
 }

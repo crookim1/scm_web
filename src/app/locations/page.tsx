@@ -23,6 +23,8 @@ import {
     TextField,
     Typography,
     Chip,
+    FormControlLabel,
+    Switch,
 } from '@mui/material';
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { Location, CreateLocationRequest, UpdateLocationRequest } from '@/lib/types/location';
@@ -57,7 +59,7 @@ export default function LocationsPage() {
             setWarehouses(warehousesData);
         } catch (error: any) {
             console.error('데이터를 불러오는데 실패했습니다:', error);
-            alert(error.response?.data?.message || '데이터를 불러오는데 실패했습니다.');
+            alert(error.response?.data?.detail || '데이터를 불러오는데 실패했습니다.');
         }
     };
 
@@ -107,25 +109,25 @@ export default function LocationsPage() {
             loadData();
         } catch (error: any) {
             console.error('위치 저장에 실패했습니다:', error);
-            alert(error.response?.data?.message || '위치 저장에 실패했습니다.');
+            alert(error.response?.data?.detail || '위치 저장에 실패했습니다.');
         }
     };
 
-    const handleDelete = async (code: string) => {
+    const handleDelete = async (id: string) => {
         if (window.confirm('정말로 이 위치를 삭제하시겠습니까?')) {
             try {
-                await locationApi.deleteLocation(code);
+                await locationApi.deleteLocation(id);
                 loadData();
             } catch (error: any) {
                 console.error('위치 삭제에 실패했습니다:', error);
-                alert(error.response?.data?.message || '위치 삭제에 실패했습니다.');
+                alert(error.response?.data?.detail || '위치 삭제에 실패했습니다.');
             }
         }
     };
 
-    const getWarehouseName = (warehouseId: string) => {
+    const getWarehouseCode = (warehouseId: string) => {
         const warehouse = warehouses.find(w => w.id === warehouseId);
-        return warehouse ? warehouse.name : '-';
+        return warehouse ? warehouse.code : '삭제된 창고';
     };
 
     const getWarehouseStatus = (warehouseId: string) => {
@@ -160,7 +162,7 @@ export default function LocationsPage() {
                     <TableBody>
                         {locations.map(location => (
                             <TableRow key={location.id}>
-                                <TableCell>{getWarehouseName(location.warehouseId)}</TableCell>
+                                <TableCell>{getWarehouseCode(location.warehouseId)}</TableCell>
                                 <TableCell>{location.code}</TableCell>
                                 <TableCell>{location.name}</TableCell>
                                 <TableCell>{location.type}</TableCell>
@@ -200,7 +202,7 @@ export default function LocationsPage() {
                                     </IconButton>
                                     <IconButton
                                         size="small"
-                                        onClick={() => handleDelete(location.code)}
+                                        onClick={() => handleDelete(location.id)}
                                     >
                                         <DeleteIcon />
                                     </IconButton>
@@ -215,27 +217,37 @@ export default function LocationsPage() {
                 <DialogTitle>{editingLocation ? '위치 수정' : '새 위치'}</DialogTitle>
                 <DialogContent>
                     <Box sx={{ pt: 2, display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <FormControl fullWidth>
-                            <InputLabel>창고</InputLabel>
-                            <Select
-                                value={formData.warehouseId}
+                        {editingLocation ? (
+                            <TextField
                                 label="창고"
-                                onChange={e =>
-                                    setFormData({ ...formData, warehouseId: e.target.value })
-                                }
-                            >
-                                {warehouses.map(warehouse => (
-                                    <MenuItem key={warehouse.id} value={warehouse.id}>
-                                        {warehouse.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
+                                value={getWarehouseCode(formData.warehouseId)}
+                                disabled
+                                fullWidth
+                            />
+                        ) : (
+                            <FormControl fullWidth>
+                                <InputLabel>창고</InputLabel>
+                                <Select
+                                    value={formData.warehouseId}
+                                    label="창고"
+                                    onChange={e =>
+                                        setFormData({ ...formData, warehouseId: e.target.value })
+                                    }
+                                >
+                                    {warehouses.map(warehouse => (
+                                        <MenuItem key={warehouse.id} value={warehouse.id}>
+                                            {warehouse.name} ({warehouse.code})
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        )}
                         <TextField
                             label="코드"
                             value={formData.code}
                             onChange={e => setFormData({ ...formData, code: e.target.value })}
                             fullWidth
+                            required
                         />
                         <TextField
                             label="이름"
@@ -243,11 +255,16 @@ export default function LocationsPage() {
                             onChange={e => setFormData({ ...formData, name: e.target.value })}
                             fullWidth
                         />
-                        <TextField
-                            label="유형"
-                            value={formData.type}
-                            onChange={e => setFormData({ ...formData, type: e.target.value })}
-                            fullWidth
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={formData.active}
+                                    onChange={e =>
+                                        setFormData({ ...formData, active: e.target.checked })
+                                    }
+                                />
+                            }
+                            label="활성 상태"
                         />
                     </Box>
                 </DialogContent>

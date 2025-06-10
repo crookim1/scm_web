@@ -141,7 +141,8 @@ backend.md 파일은 다른 AI가보고 판단해서 백엔드개발을 진행�
     - id: String
     - code: String (창고 코드, unique)
     - name: String (창고명)
-    - active: Boolean
+    - active: Boolean (활성화 여부)
+    - deleted: Boolean (삭제 여부, 기본값 false)
     - createdDateTime: ZonedDateTime
     - updatedDateTime: ZonedDateTime?
 
@@ -153,8 +154,8 @@ backend.md 파일은 다른 AI가보고 판단해서 백엔드개발을 진행�
     - warehouseId: String (소속 창고 ID)
     - code: String (위치 코드)
     - name: String (위치명)
-    - type: String (위치 유형)
-    - active: Boolean
+    - active: Boolean (활성화 여부)
+    - deleted: Boolean (삭제 여부, 기본값 false)
     - createdDateTime: ZonedDateTime
     - updatedDateTime: ZonedDateTime?
 
@@ -169,7 +170,7 @@ backend.md 파일은 다른 AI가보고 판단해서 백엔드개발을 진행�
     - quantity: Long (수량)
     - reservedQuantity: Long (예약 수량)
     - lotNumber: String? (로트 번호)
-    - expiryDate: ZonedDateTime? (유통기한)
+    - expiryDateTime: ZonedDateTime? (유통기한)
     - createdDateTime: ZonedDateTime
     - updatedDateTime: ZonedDateTime?
 
@@ -184,7 +185,7 @@ backend.md 파일은 다른 AI가보고 판단해서 백엔드개발을 진행�
     - purpose: String (예약 목적)
     - referenceId: String? (참조 ID)
     - referenceType: String (참조 유형)
-    - expiryDate: ZonedDateTime? (만료일)
+    - expiryDateTime: ZonedDateTime? (만료일)
     - reason: String? (사유)
     - createdDateTime: ZonedDateTime
     - updatedDateTime: ZonedDateTime?
@@ -240,7 +241,7 @@ Content-Type: application/json
   "minimumQuantity": 0,      // 선택, 최소 0
   "sellingPrice": 0.0,       // 선택, 최소 0
   "purchasePrice": 0.0,      // 선택, 최소 0
-  "active": true          // 선택, 기본값 true
+  "active": true            // 선택, 기본값 true
 }
 ```
 
@@ -272,7 +273,7 @@ Content-Type: application/json
   "minimumQuantity": 0,      // 선택, 최소 0
   "sellingPrice": 0.0,       // 선택, 최소 0
   "purchasePrice": 0.0,      // 선택, 최소 0
-  "active": true          // 선택
+  "active": true            // 선택
 }
 ```
 
@@ -293,7 +294,7 @@ Content-Type: application/json
 {
   "code": "string",    // 필수
   "name": "string",    // 필수
-  "active": true    // 선택, 기본값 true
+  "active": true      // 선택, 기본값 true
 }
 ```
 
@@ -319,7 +320,7 @@ Content-Type: application/json
 {
   "code": "string?",   // 선택
   "name": "string?",   // 선택
-  "active": true    // 선택
+  "active": true      // 선택
 }
 ```
 
@@ -328,6 +329,10 @@ Content-Type: application/json
 ```http
 DELETE /api/v1/warehouses/{id}
 ```
+
+- 실제로 데이터를 삭제하지 않고 deleted 필드를 true로 설정
+- deleted가 true인 창고는 조회되지 않음
+- 이미 삭제된 창고는 재삭제 불가
 
 ### 3. 위치 관리 API (/api/v1/locations)
 
@@ -341,8 +346,7 @@ Content-Type: application/json
   "warehouseId": "string",  // 필수
   "name": "string",         // 필수
   "code": "string",         // 필수
-  "type": "string",         // 필수
-  "active": true         // 선택, 기본값 true
+  "active": true           // 선택, 기본값 true
 }
 ```
 
@@ -371,17 +375,22 @@ PUT /api/v1/locations/{id}
 Content-Type: application/json
 
 {
-  "name": "string?",   // 선택
-  "type": "string?",   // 선택
-  "active": true    // 선택
+  "warehouseId": "string",  // 필수
+  "code": "string",    // 필수, 위치 코드
+  "name": "string?",    // 선택, 위치명
+  "active": true       // 선택, 활성화 여부
 }
 ```
 
 #### 위치 삭제
 
 ```http
-DELETE /api/v1/locations/{code}
+DELETE /api/v1/locations/{id}
 ```
+
+- 실제로 데이터를 삭제하지 않고 deleted 필드를 true로 설정
+- deleted가 true인 위치는 조회되지 않음
+- 이미 삭제된 위치는 재삭제 불가
 
 ### 4. 재고 관리 API (/api/v1/inventories)
 
@@ -427,7 +436,7 @@ Content-Type: application/json
   "locationId": "string",    // 선택
   "quantity": 0,             // 필수, 최소 0
   "lotNumber": "string?",    // 선택
-  "expiryDate": "string?"    // 선택, ISO-8601 형식
+  "expiryDateTime": "string?"    // 선택, ISO-8601 형식
 }
 ```
 
@@ -478,7 +487,7 @@ Content-Type: application/json
   "purpose": "string",              // 필수
   "referenceId": "string?",         // 선택
   "referenceType": "string",        // 선택, 기본값 "OTHER"
-  "expiryDate": "string?",          // 선택, ISO-8601 형식
+  "expiryDateTime": "string?",          // 선택, ISO-8601 형식
   "reason": "string?"               // 선택
 }
 ```
@@ -505,8 +514,8 @@ Query Parameters:
   - lotNumber: string?
   - minQuantity: number?
   - maxQuantity: number?
-  - minExpiryDate: string? (ISO-8601)
-  - maxExpiryDate: string? (ISO-8601)
+  - minExpiryDateTime: string? (ISO-8601)
+  - maxExpiryDateTime: string? (ISO-8601)
 ```
 
 ### 5. BOM 관리 API (/api/v1/boms)

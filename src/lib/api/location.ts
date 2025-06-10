@@ -40,7 +40,7 @@ export const locationApi = {
     },
 
     // 위치 삭제
-    deleteLocation: async (code: string): Promise<void> => {
-        await api.delete<ApiResponse<void>>(`/api/v1/locations/${code}`);
+    deleteLocation: async (id: string): Promise<void> => {
+        await api.delete<ApiResponse<void>>(`/api/v1/locations/${id}`);
     },
 };

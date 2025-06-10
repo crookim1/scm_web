@@ -48,7 +48,7 @@ export default function WarehousesPage() {
             setWarehouses(data);
         } catch (error: any) {
             console.error('창고 목록을 불러오는데 실패했습니다:', error);
-            alert(error.response?.data?.message || '창고 목록을 불러오는데 실패했습니다.');
+            alert(error.response?.data?.detail || '창고 목록을 불러오는데 실패했습니다.');
         }
     };
 
@@ -92,7 +92,7 @@ export default function WarehousesPage() {
             loadWarehouses();
         } catch (error: any) {
             console.error('창고 저장에 실패했습니다:', error);
-            alert(error.response?.data?.message || '창고 저장에 실패했습니다.');
+            alert(error.response?.data?.detail || '창고 저장에 실패했습니다.');
         }
     };
 
@@ -103,7 +103,7 @@ export default function WarehousesPage() {
                 loadWarehouses();
             } catch (error: any) {
                 console.error('창고 삭제에 실패했습니다:', error);
-                alert(error.response?.data?.message || '창고 삭제에 실패했습니다.');
+                alert(error.response?.data?.detail || '창고 삭제에 실패했습니다.');
             }
         }
     };
